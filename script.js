@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 function getEarthquakes(){
     fetch(`https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson`)
     .then(res => res.json())
@@ -20,7 +20,7 @@ function getEarthquakes(){
     })
 }
 getEarthquakes();
-=======
+
 async function initMap(){
     const terremotos = await getEarthquakes();
 
@@ -43,4 +43,4 @@ async function initMap(){
     
 
 }
->>>>>>> feature/mapa
+
