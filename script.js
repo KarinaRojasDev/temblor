@@ -121,4 +121,4 @@ async function buscarTerremotos() {
   });
 }
 initMap2();
-document.getElementById("btn-buscar").addEventListener("click", () => buscarTerremotos());
+document.querySelector(".btn-buscar").addEventListener("click", () => buscarTerremotos());
