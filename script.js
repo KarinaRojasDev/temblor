@@ -99,16 +99,43 @@ async function buscarTerremotos() {
   let fechaInicio = document.getElementById("fecha-inicio").value;
   let fechaFin = document.getElementById("fecha-fin").value;
 
-  let filtros  = await fetchEarthquakesFiltrados(magnitud,fechaInicio,fechaFin);
+  /* validación magnitud */
 
-  filtros.forEach((f) => {
-    L.circleMarker([f.latitud, f.longitud], {
-      color: getColor(f.magnitud),
-      fillColor: getColor(f.magnitud),
-      fillOpacity: 0.5,
-      radius: 5,
-    })
-      .bindPopup(`
+  let mensaje = document.getElementById("mensaje");
+  mensaje.textContent ="";
+  let errorMensaje = "";
+  const regexMagnitud = /^[0-7](\.\d+)?$/;
+  
+  if(!regexMagnitud.test(magnitud)){
+    errorMensaje += "- La magnitud debe estar entre 0 y 7\n";
+  }
+
+  /* validación año inicio, año fin */
+  const fechaActual = new Date();
+  const fechaInicioDate = new Date(fechaInicio);
+  const fechaFinDate = new Date(fechaFin);
+
+  if (fechaInicioDate > fechaActual)errorMensaje += "- La fecha inicio no puede ser mayor que la fecha actual.\n";
+  if (fechaInicioDate > fechaFinDate) errorMensaje += "- La fecha inicio no puede ser mayor que la fecha fin.\n";
+  if(fechaFinDate > fechaActual) errorMensaje += "- La fecha fin no puede ser mayor que la fecha actual.\n";
+  
+  if (errorMensaje ) {
+    mensaje.textContent = errorMensaje;
+  }else{
+    let filtros = await fetchEarthquakesFiltrados(
+      magnitud,
+      fechaInicio,
+      fechaFin,
+    );
+
+    filtros.forEach((f) => {
+      L.circleMarker([f.latitud, f.longitud], {
+        color: getColor(f.magnitud),
+        fillColor: getColor(f.magnitud),
+        fillOpacity: 0.5,
+        radius: 5,
+      })
+        .bindPopup(`
         <article>
           <h2>${f.titulo}</h2>
           <p>Fecha: ${f.fecha}</p>
@@ -117,8 +144,9 @@ async function buscarTerremotos() {
           <p>Magnitud: ${f.magnitud}</p>
           <p>Tipo de medida:${f.tipoMedida}</p>
         </article>`
-      ).addTo(map2);
-  });
+        ).addTo(map2);
+    });
+  }
 }
 initMap2();
 document.querySelector(".btn-buscar").addEventListener("click", () => buscarTerremotos());
