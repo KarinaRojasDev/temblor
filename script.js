@@ -20,26 +20,44 @@ async function getEarthquakes(){
     return terremotos;
 }
 
-async function initMap(){
-    const terremotos = await getEarthquakes();
+async function initMap() {
+  //situar el mapa
+  var map = L.map("mapa").setView([20, 0], 2);
 
-    
-    //situar el mapa
-    var map = L.map("mapa").setView([20,0], 2);
+  //carga las images del mapa
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution:
+      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  }).addTo(map);
 
-    //carga las images del mapa
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", 
-        {
-            maxZoom: 19,
-            attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        }
-    ).addTo(map);
+  const terremotos = await getEarthquakes();
 
-    //marcador circular
-   
-
-    //añade un Popup al mapa
-    
-
+  terremotos.forEach((t) => {
+    L.circleMarker([t.latitud, t.longitud], {
+      color: getColor(t.magnitud),
+      fillColor: getColor(t.magnitud),
+      fillOpacity: 0.5,
+      radius: 5,
+    })
+      .bindPopup(
+        `
+            <h2>${t.titulo}</h2><br>
+            Fecha: ${t.fecha}<br>
+            Ubicación: ${t.ubicacion}<br>
+            Código: ${t.codigo}<br>
+            Magnitud: ${t.magnitud}<br>
+            `,
+      )
+      .addTo(map);
+  });
 }
+initMap();
 
+function getColor(magnitud){
+    if(magnitud >= 6) return "red";
+    else if(magnitud >= 5) return "orange";
+    else if(magnitud >= 3) return "yellow";
+    else if(magnitud >= 1) return "green";
+    else return "white";
+}
