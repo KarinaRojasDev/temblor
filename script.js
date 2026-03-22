@@ -47,6 +47,7 @@ async function initMap() {
             Ubicación: ${t.ubicacion}<br>
             Código: ${t.codigo}<br>
             Magnitud: ${t.magnitud}<br>
+            Tipo de medida:${t.tipoMedida}
             `,
       )
       .addTo(map);
