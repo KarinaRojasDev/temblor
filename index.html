@@ -11,11 +11,22 @@
 </head>
 <body>
     <header>
-        <h1>🌋 Mapa de terremotos en el mundo</h1>
+        <h1>Mapa de terremotos en el mundo</h1>
     </header>
     <main>
         <section id="mapa"></section>
-        <section id="terremotos"></section>
+        <section class="filtros-container">
+            <section class="filtros">
+                <label for="magnitud">Filtro magnitud</label>
+                <input type="number" id="magnitud" name="filtro por magnitud">
+                <label for="fecha-inicio">Filtro fecha inicio</label>
+                <input type="date" id="fecha-inicio" name="filtro por fecha de inicio">
+                <label for="fecha-fin">Filtro fecha fin</label>
+                <input type="date" id="fecha-fin" name="filtro por fecha final">
+                <button type="button" class="btn-buscar">Buscar</button>
+            </section>
+            <section id="mapa2"></section>
+        </section>
     </main>
     <footer>
         <p>&copy; 2026 Earthquakes Project</p>
