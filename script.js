@@ -79,6 +79,9 @@ async function initMap() {
     let addFavoritos = document.createElement("button");
     addFavoritos.textContent = "Añadir a favoritos";
     addFavoritos.className = "btn-add-favoritos";
+    addFavoritos.addEventListener("click", () => {
+      guardarFavorito(t);
+    });
     article.appendChild(addFavoritos);
 
     L.circleMarker([t.latitud, t.longitud], {
@@ -92,6 +95,8 @@ async function initMap() {
   });
 }
 initMap();
+
+function guardarFavorito() {}
 
 function getColor(magnitud) {
   if (magnitud >= 6) return "red";
