@@ -204,3 +204,96 @@ initMap2();
 document
   .querySelector(".btn-buscar")
   .addEventListener("click", () => buscarTerremotos());
+
+/* Crea el documento del usuario en Firestore con email y array de favoritos vacío */
+const createUser = (user) => {
+  db.collection("user")
+    .doc(user.id)
+    .set({
+      email: user.email,
+      favoritos: [],
+    })
+    .then(() => console.log("Usuario creado con ID: ", user.id))
+    .catch((error) => console.log("Error creando usuario: ", error));
+}
+
+/* Registra un nuevo usuario en Firebase Auth y lo guarda en Firestore */
+const singUpUser = (email,password) => {
+  firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredential) => {
+    let user = userCredential.user;
+    console.log(`se ha registrado ${user.email} ID:${user.uid}`);
+    alert(`se ha registrado ${user.email} ID:${user.uid}`);
+
+    createUser({
+      id: user.uid,
+      email: user.email
+    });
+  })
+  .catch(error => {console.log(`
+    Error en el sistema ${error.message}
+    Error: ${error.code}`);
+  })
+}
+
+document.getElementById("form1").addEventListener("submit", (event) => {
+  event.preventDefault();
+  let email = event.target.email.value;
+  let pass = event.target.pass.value;
+  let pass2 = event.target.pass2.value;
+
+  pass === pass2 ? singUpUser(email,pass) : alert("error password");
+})
+
+
+/* Inicia sesión con email y contraseña */
+const signInUser = (email, password) => {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      let user = userCredential.user;
+      console.log(`ha iniciado sesión ${user.email} ID:${user.uid}`);
+      alert(`ha iniciado sesión ${user.email} ID:${user.uid}`);
+      console.log("USER", user);
+    })
+    .catch((error) => {
+      console.log(`
+    Error en el sistema ${error.message}
+    Error: ${error.code}`);
+    });
+} 
+
+document.getElementById("form2").addEventListener("submit", (event) => {
+  event.preventDefault();
+  let email = event.target.email2.value;
+  let pass = event.target.pass3.value;
+  signInUser(email,pass);
+})
+
+
+/* Cierra la sesión del usuario actual  */
+const signOut = () => {
+  let user = firebase.auth().currentUser;
+
+  firebase.auth().signOut().then(() => {
+    console.log(`Sale del sistema: ${user.email}`);
+  }).catch(error => {
+    console.log(`Hubo un error: ${error}`);
+  })
+}
+
+document.getElementById("salir").addEventListener("click", () => signOut());
+
+
+/* Escucha cambios en el estado de autenticación: usuario logado o no */
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    console.log(`Está en el sistema:${user.email} ${user.uid}`);
+    document.getElementById("message").innerText =
+      `Está en el sistema: ${user.uid}`;
+  } else {
+    console.log("no hay usuarios en el sistema");
+    document.getElementById("message").innerText =
+      `No hay usuarios en el sistema`;
+  }
+});
