@@ -224,7 +224,10 @@ const singUpUser = (email,password) => {
     /* mensaje en el dom */
     document.getElementById("mensaje-registro").textContent =
       `Usuario ${user.email} registrado correctamente con ID:${user.uid}`;
-  
+
+    setTimeout(() => {
+      document.getElementById("mensaje-registro").textContent = "";
+    }, 5000);
 
     document.getElementById("form1").reset();
     createUser({
@@ -232,9 +235,7 @@ const singUpUser = (email,password) => {
       email: user.email
     });
   })
-  .catch(error => {console.log(`
-    Error en el sistema ${error.message}
-    Error: ${error.code}`);
+  .catch(error => {document.getElementById("mensaje-registro").textContent = error.message;
   })
 }
 
@@ -255,9 +256,15 @@ const signInUser = (email, password) => {
     .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       let user = userCredential.user;
+
       /* mensaje de bienbenida en el DOM */
       document.getElementById("mensaje-login").textContent =
         `Bienvenido ${user.email} con ID:${user.uid}`;
+
+      setTimeout(() => {
+        document.getElementById("mensaje-login").textContent = "";
+      }, 5000);
+      
       document.getElementById("form2").reset();
       
     })
