@@ -34,16 +34,21 @@ async function getEarthquakes() {
   return terremotos;
 }
 
+let map;
 async function initMap() {
-  //situar el mapa
-  var map = L.map("mapa").setView([20, 0], 2);
 
-  //carga las images del mapa
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-  }).addTo(map);
+  if (!map) {
+    //situar el mapa
+    map = L.map("mapa").setView([20, 0], 2);
+
+    //carga las images del mapa
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+  }
+  
 
   const terremotos = await getEarthquakes();
 
@@ -335,6 +340,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     console.log(`Está en el sistema:${user.email} ${user.uid}`);
     document.getElementById("message").innerText =
       `Está en el sistema: ${user.uid}`;
+    initMap();
   } else {
     console.log("no hay usuarios en el sistema");
     document.getElementById("message").innerText =
