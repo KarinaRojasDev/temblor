@@ -224,6 +224,7 @@ const singUpUser = (email,password) => {
     console.log(`se ha registrado ${user.email} ID:${user.uid}`);
     alert(`se ha registrado ${user.email} ID:${user.uid}`);
 
+    document.getElementById("form1").reset();
     createUser({
       id: user.uid,
       email: user.email
@@ -254,6 +255,7 @@ const signInUser = (email, password) => {
       let user = userCredential.user;
       console.log(`ha iniciado sesión ${user.email} ID:${user.uid}`);
       alert(`ha iniciado sesión ${user.email} ID:${user.uid}`);
+      document.getElementById("form2").reset();
       console.log("USER", user);
     })
     .catch((error) => {
