@@ -11,6 +11,9 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore(); 
 
+let map;
+let map2;
+let marcadores = [];
 
 async function getEarthquakes() {
   let res = await fetch(
@@ -34,7 +37,6 @@ async function getEarthquakes() {
   return terremotos;
 }
 
-let map;
 async function initMap() {
 
   if (!map) {
@@ -49,7 +51,7 @@ async function initMap() {
     }).addTo(map);
   }
   
-
+  limpiarMarcadores();
   const terremotos = await getEarthquakes();
 
   
@@ -92,7 +94,7 @@ async function initMap() {
       article.appendChild(addFavoritos);
     }
     
-    L.circleMarker([t.latitud, t.longitud], {
+    let marcador = L.circleMarker([t.latitud, t.longitud], {
       color: getColor(t.magnitud),
       fillColor: getColor(t.magnitud),
       fillOpacity: 0.5,
@@ -100,9 +102,16 @@ async function initMap() {
     })
       .bindPopup(article)
       .addTo(map);
+    marcadores.push(marcador);
   });
 }
 initMap();
+
+/* limpia mapa */
+function limpiarMarcadores(){
+  marcadores.forEach(m => m.remove());
+  marcadores = [];
+}
 
 //Add favoritos
 function guardarFavorito(t) {
@@ -141,8 +150,92 @@ function getColor(magnitud) {
   else return "white";
 }
 
+function leerFavoritos(){
+  const user = firebase.auth().currentUser;
+  const userRef = db.collection("user").doc(user.uid);
+
+  userRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        let favoritos = doc.data().favoritos;
+        if (!favoritos) {
+          favoritos = [];
+        }
+        limpiarMarcadores();
+        favoritos.forEach((t) => {
+          let article = document.createElement("article");
+          article.className = "favoritos";
+
+          let titulo = document.createElement("h2");
+          titulo.textContent = t.titulo;
+          article.appendChild(titulo);
+
+          let fecha = document.createElement("p");
+          fecha.textContent = `Fecha: ${t.fecha}`;
+          article.appendChild(fecha);
+
+          let ubicacion = document.createElement("p");
+          ubicacion.textContent = `Ubicación: ${t.ubicacion}`;
+          article.appendChild(ubicacion);
+
+          let codigo = document.createElement("p");
+          codigo.textContent = `Código: ${t.codigo}`;
+          article.appendChild(codigo);
+
+          let magnitud = document.createElement("p");
+          magnitud.textContent = `Magnitud: ${t.magnitud}`;
+          article.appendChild(magnitud);
+
+          let tipoMedida = document.createElement("p");
+          tipoMedida.textContent = `Tipo de medida: ${t.tipoMedida}`;
+          article.appendChild(tipoMedida);
+
+          let btnEliminar = document.createElement("button");
+          btnEliminar.textContent = "Eliminar de favoritos";
+          btnEliminar.className = "btn-eliminar-favorito";
+          btnEliminar.addEventListener("click", () => {
+            eliminarFavorito(t.codigo);
+          });
+          article.appendChild(btnEliminar);
+
+          let marcador = L.circleMarker([t.latitud, t.longitud], {
+            color: getColor(t.magnitud),
+            fillColor: getColor(t.magnitud),
+            fillOpacity: 0.5,
+            radius: 5,
+          })
+            .bindPopup(article)
+            .addTo(map);
+          marcadores.push(marcador);
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error leyendo favoritos: ", error);
+    });
+}
+
+/* Elimina un favorito  */
+function eliminarFavorito(codigo) {
+  const user = firebase.auth().currentUser;
+  const userRef = db.collection("user").doc(user.uid);
+
+  userRef.get().then((doc) => {
+    if (doc.exists) {
+      let favoritos = doc.data().favoritos;
+      const nuevosFavoritos = favoritos.filter(f => f.codigo !== codigo);
+      userRef.update({ favoritos: nuevosFavoritos }).then(() => {
+        alert("Terremoto eliminado de favoritos");
+        leerFavoritos();
+      });
+    }
+  }).catch((error) => {
+    console.error("Error eliminando favorito: ", error);
+  });
+}
+
 /* mapa dos */
-let map2;
 async function fetchEarthquakesFiltrados(magnitud, fechaInicio, fechaFin) {
   let res = await fetch(
     `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minmagnitude=${magnitud}&starttime=${fechaInicio}&endtime=${fechaFin}`,
@@ -332,6 +425,10 @@ const signOut = () => {
 }
 
 document.getElementById("salir").addEventListener("click", () => signOut());
+
+
+document.querySelector(".btn-favoritos").addEventListener("click", leerFavoritos);
+document.querySelector(".btn-terremotos").addEventListener("click", initMap);
 
 
 /* Escucha cambios en el estado de autenticación: usuario logado o no */
