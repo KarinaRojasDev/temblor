@@ -14,6 +14,7 @@ const db = firebase.firestore();
 let map;
 let map2;
 let marcadores = [];
+let marcadores2 = [];
 
 async function getEarthquakes() {
   let res = await fetch(
@@ -274,7 +275,6 @@ async function buscarTerremotos() {
   let fechaFin = document.getElementById("fecha-fin").value;
 
   /* validación magnitud */
-
   let mensaje = document.getElementById("mensaje");
   mensaje.textContent = "";
   let errorMensaje = "";
@@ -300,14 +300,15 @@ async function buscarTerremotos() {
   if (errorMensaje) {
     mensaje.textContent = errorMensaje;
   } else {
-    let filtros = await fetchEarthquakesFiltrados(
-      magnitud,
-      fechaInicio,
-      fechaFin,
-    );
+
+    /* limpia marcadores anteriores del mapa 2 */
+    marcadores2.forEach((m) => m.remove());
+    marcadores2 = [];
+
+    let filtros = await fetchEarthquakesFiltrados(magnitud,fechaInicio,fechaFin,);
 
     filtros.forEach((f) => {
-      L.circleMarker([f.latitud, f.longitud], {
+      let marcador = L.circleMarker([f.latitud, f.longitud], {
         color: getColor(f.magnitud),
         fillColor: getColor(f.magnitud),
         fillOpacity: 0.5,
@@ -325,13 +326,14 @@ async function buscarTerremotos() {
         </article>`,
         )
         .addTo(map2);
+        marcadores2.push(marcador);
     });
   }
 }
+
 initMap2();
-document
-  .querySelector(".btn-buscar")
-  .addEventListener("click", () => buscarTerremotos());
+
+document.querySelector(".btn-buscar").addEventListener("click", () => buscarTerremotos());
 
 /* Crea el documento del usuario en Firestore con email y array de favoritos vacío */
 const createUser = (user) => {
