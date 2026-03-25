@@ -76,14 +76,17 @@ async function initMap() {
     tipoMedida.textContent = `Tipo de medida:${t.tipoMedida}`;
     article.appendChild(tipoMedida);
 
-    let addFavoritos = document.createElement("button");
-    addFavoritos.textContent = "Añadir a favoritos";
-    addFavoritos.className = "btn-add-favoritos";
-    addFavoritos.addEventListener("click", () => {
-      guardarFavorito(t);
-    });
-    article.appendChild(addFavoritos);
-
+    const user = firebase.auth().currentUser;
+    if(user){
+      let addFavoritos = document.createElement("button");
+      addFavoritos.textContent = "Añadir a favoritos";
+      addFavoritos.className = "btn-add-favoritos";
+      addFavoritos.addEventListener("click", () => {
+        guardarFavorito(t);
+      });
+      article.appendChild(addFavoritos);
+    }
+    
     L.circleMarker([t.latitud, t.longitud], {
       color: getColor(t.magnitud),
       fillColor: getColor(t.magnitud),
