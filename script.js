@@ -221,8 +221,10 @@ const createUser = (user) => {
 const singUpUser = (email,password) => {
   firebase.auth().createUserWithEmailAndPassword(email, password).then((userCredential) => {
     let user = userCredential.user;
-    console.log(`se ha registrado ${user.email} ID:${user.uid}`);
-    alert(`se ha registrado ${user.email} ID:${user.uid}`);
+    /* mensaje en el dom */
+    document.getElementById("mensaje-registro").textContent =
+      `Usuario ${user.email} registrado correctamente con ID:${user.uid}`;
+  
 
     document.getElementById("form1").reset();
     createUser({
@@ -253,12 +255,15 @@ const signInUser = (email, password) => {
     .signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       let user = userCredential.user;
-      console.log(`ha iniciado sesión ${user.email} ID:${user.uid}`);
-      alert(`ha iniciado sesión ${user.email} ID:${user.uid}`);
+      /* mensaje de bienbenida en el DOM */
+      document.getElementById("mensaje-login").textContent =
+        `Bienvenido ${user.email} con ID:${user.uid}`;
       document.getElementById("form2").reset();
-      console.log("USER", user);
+      
     })
     .catch((error) => {
+      document.getElementById("mensaje-login").textContent =
+        "Usuario no encontrado, por favor regístrese antes de iniciar sesión";
       console.log(`
     Error en el sistema ${error.message}
     Error: ${error.code}`);
