@@ -99,7 +99,34 @@ async function initMap() {
 }
 initMap();
 
-function guardarFavorito() {}
+//Add favoritos
+function guardarFavorito(t) {
+  const user = firebase.auth().currentUser;
+
+  const userRef = db.collection("user").doc(user.uid);
+
+  userRef
+    .get()
+    .then((doc) => {
+      if (doc.exists) {
+        const favoritos = doc.data().favoritos;
+        const duplicado = favoritos.find(f => f.codigo === t.codigo);
+        if(duplicado){
+          alert("Este terremoto ya está en favoritos");
+          return;
+        }
+        const updateFavoritos = [...favoritos, t ];
+        userRef.update({ favoritos: updateFavoritos }).then(() => {
+          alert("Foto añadida a favoritos.");
+        });
+      } else {
+        console.log("No se encontró el usuario.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error añadiendo a favoritos: ", error);
+    });
+}
 
 function getColor(magnitud) {
   if (magnitud >= 6) return "red";
