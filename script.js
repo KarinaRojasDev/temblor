@@ -14,7 +14,7 @@ const db = firebase.firestore();
 
 async function getEarthquakes() {
   let res = await fetch(
-    `https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson`,
+    `./assets/data/terremotos.json`,
   );
   let data = await res.json();
 
