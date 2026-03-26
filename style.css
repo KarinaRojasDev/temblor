@@ -1,8 +1,248 @@
-#mapa {
-    height: 500px;
-    width: 80%;
+:root {
+    --fondo-principal: #0a1f2d;
+    --fondo-secundario: #12314a;
+    --fondo-card: #1f3b57;
+    --color-principal: #1abc9c;
+    --color-secundario: #3498db;
+    --rosa-acento: #ff6f91;
+    --morado-acento: #9b59b6;
+    --texto-principal: #ecf0f1;
+    --texto-suave: #bdc3c7;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--texto-suave);
+    background-color: var(--fondo-principal);
+}
+
+/* HEADER */
+header {
+    background-color: var(--fondo-principal);
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    color: var(--color-principal);
+    font-size: 3rem;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 6px var(--rosa-acento);
+}
+
+/* MAIN */
+main {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/* SECCIÓN LOGIN */
+.login {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    background-color: var(--fondo-secundario);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px var(--fondo-principal);
+}
+
+.login article {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login h2 {
+    color: var(--color-principal);
+    font-size: 2rem;
+    text-align: center;
+    text-shadow: 0 4px 20px var(--fondo-card);
+}
+
+.login form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login label {
+    color: var(--texto-principal);
+}
+
+/* INPUTS registro y  login*/
+input {
+    width: 90%;
+    max-width: 450px;
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    border: 1px solid var(--texto-suave);
+    background-color: var(--fondo-card);
+    color: var(--texto-principal);
+    transition: 0.3s;
+}
+
+input:hover{
+    box-shadow: 0 4px 15px var(--color-principal);
+    border-color: var(--color-principal);
+    transform: translateY(-2px);
+}
+
+/* Inputs de filtros  magnitud*/
+.filtros input {
+    width: 90%;
+    max-width: 250px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border-radius: 50px;
+    border: 1px solid var(--texto-suave);
+    background-color: var(--fondo-card);
+    color: var(--texto-principal);
+    transition: 0.3s;
+}
+
+.filtros input:hover {
+    box-shadow: 0 4px 15px var(--color-principal);
+    border-color: var(--color-principal);
+    transform: translateY(-2px);
+}
+
+.login button {
+    background-color: var(--color-principal);
+    color: var(--fondo-principal);
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.login button:hover {
+    background-color: var(--rosa-acento);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* MAPA Y BOTONES */
+.mapa-container {
+    margin: 40px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+#mapa,
 #mapa2 {
-    height: 500px;
-    width: 80%;
+    width: 100%;
+    height: 400px;
+    border-radius: 12px;
+    border: 2px solid var(--color-principal);
+    box-shadow: 0 4px 15px var(--fondo-principal);
+}
+
+.btn-container,
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-terremotos,
+.btn-favoritos,
+.btn-buscar {
+    background-color: var(--color-secundario);
+    color: var(--fondo-principal);
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s ease;
+    font-weight: bold;
+}
+
+.btn-terremotos:hover,
+.btn-favoritos:hover,
+.btn-buscar:hover {
+    background-color: var(--rosa-acento);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* FILTROS */
+.filtros-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.filtros label {
+    color: var(--texto-principal);
+}
+
+#mensaje,
+#mensaje-registro,
+#mensaje-login,
+#message {
+    color: var(--rosa-acento);
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* FOOTER */
+footer {
+    background-color: var(--fondo-secundario);
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer p {
+    color: var(--texto-suave);
+    font-size: 0.9rem;
+}
+
+/* MEDIA QUERIES: RESPONSIVE */
+@media (min-width: 768px) {
+    .login {
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 40px;
+    }
+
+    .login article {
+        flex: 1;
+    }
+
+    #mapa,
+    #mapa2 {
+        height: 500px;
+    }
+
+    .filtros-container {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .filtros {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (min-width: 1024px) {
+    main {
+        padding: 40px;
+    }
 }
