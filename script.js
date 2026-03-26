@@ -32,6 +32,7 @@ async function getEarthquakes() {
       tipoMedida: t.properties.magType,
       longitud: t.geometry.coordinates[0],
       latitud: t.geometry.coordinates[1],
+      url: t.properties.url,
     };
   });
   console.log(terremotos);
@@ -83,6 +84,12 @@ async function initMap() {
     let tipoMedida = document.createElement("p");
     tipoMedida.textContent = `Tipo de medida:${t.tipoMedida}`;
     article.appendChild(tipoMedida);
+
+    let url = document.createElement("a");
+    url.href = t.url;
+    url.textContent = "Ver más detalles";
+    url.target = "_blank";
+    article.appendChild(url);
 
     const user = firebase.auth().currentUser;
     if(user){
@@ -194,6 +201,12 @@ function leerFavoritos(){
           let tipoMedida = document.createElement("p");
           tipoMedida.textContent = `Tipo de medida: ${t.tipoMedida}`;
           article.appendChild(tipoMedida);
+
+          let url = document.createElement("a");
+          url.href = t.url;
+          url.textContent = "Ver más detalles";
+          url.target = "_blank";
+          article.appendChild(url);
 
           let btnEliminar = document.createElement("button");
           btnEliminar.textContent = "Eliminar de favoritos";
