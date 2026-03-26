@@ -145,12 +145,12 @@ function guardarFavorito(t) {
 
 function getColor(magnitud) {
   if (magnitud > 7) return "#ea3da2";
-  else if (magnitud > 6) return "#d2120b";
+  else if (magnitud >= 6) return "#d2120b";
   else if (magnitud >= 5) return "#ef9608";
-  else if(magnitud == 4) return "#F2C300";
-  else if (magnitud == 3) return "#F2E500";
-  else if(magnitud == 2) return "#8A8F1A";
-  else if (magnitud == 1) return "#1F8E1F";
+  else if (magnitud >= 4) return "#F2C300";
+  else if (magnitud >= 3) return "#F2E500";
+  else if (magnitud >= 2) return "#8A8F1A";
+  else if (magnitud >= 1) return "#1F8E1F";
   else return "#CFCFCF";
 }
 
