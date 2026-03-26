@@ -190,7 +190,7 @@ input:hover{
 .filtros label {
     color: var(--texto-principal);
 }
-
+/* mensaje p */
 #mensaje,
 #mensaje-registro,
 #mensaje-login,
